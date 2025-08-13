@@ -1,0 +1,6 @@
+{
+  "airDropList": [
+    { "address": "DCHxodkzaKCLjmnG4LP8uH6NKynmntmCNz", "tick": "dcac", "amount": 1000, "op": "transfer" },
+    { "dogecoin_address": "DRh4mQh8iZ6ug2i8m7p9m4C2VwT3d9Q6oX", "ticker": "dcac", "amt": "2500", "op": "mint", "repeat": 2 }
+  ]
+}
