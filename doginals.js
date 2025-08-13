@@ -59,15 +59,17 @@ async function doge20() {
  let subcmd = process.argv[3]
 
 
- if (subcmd === 'mint') {
-   await doge20Transfer("mint")
- } else if (subcmd === 'transfer') {
-   await doge20Transfer()
- } else if (subcmd === 'deploy') {
-   await doge20Deploy()
- } else {
-   throw new Error(`unknown subcommand: ${subcmd}`)
- }
+   if (subcmd === 'mint') {
+    await doge20Transfer("mint")
+  } else if (subcmd === 'transfer') {
+    await doge20Transfer()
+  } else if (subcmd === 'deploy') {
+    await doge20Deploy()
+  } else if (subcmd === 'airdrop') {
+    await doge20Airdrop()
+  } else {
+    throw new Error(`unknown subcommand: ${subcmd}`)
+  }
 }
 
 
@@ -125,6 +127,66 @@ async function doge20Transfer(op = "transfer") {
    console.log("Minting drc-20 token...", i + 1, "of", argRepeat, "times");
    await mint(argAddress, "text/plain;charset=utf-8", encodedDoge20Tx);
  }
+}
+
+
+async function doge20Airdrop() {
+  const listPath = process.argv[4]
+
+
+  if (!listPath) {
+    throw new Error('usage: node . drc-20 airdrop <path-to-json>')
+  }
+
+
+  if (!fs.existsSync(listPath)) {
+    throw new Error(`airdrop file not found: ${listPath}`)
+  }
+
+
+  const payload = JSON.parse(fs.readFileSync(listPath))
+
+
+  // Support both array and object wrappers
+  const entries = Array.isArray(payload) ? payload : (payload.airDropList || payload.entries || [])
+
+
+  if (!Array.isArray(entries) || entries.length === 0) {
+    throw new Error('airdrop list is empty or invalid; expected an array at root, or { "airDropList": [...] }')
+  }
+
+
+  for (let i = 0; i < entries.length; i++) {
+    const item = entries[i] || {}
+    const address = item.address || item.dogecoin_address || item.to
+    const tick = (item.tick || item.ticker || '').toLowerCase()
+    const amount = String(item.amount || item.amt || '')
+    const op = (item.op || 'transfer').toLowerCase()
+    const repeat = Number(item.repeat || 1)
+
+
+    if (!address || !tick || !amount) {
+      console.log(`Skipping entry ${i + 1}: missing fields (need address, tick, amount)`)
+      continue
+    }
+
+
+    const doge20Tx = {
+      p: 'drc-20',
+      op,
+      tick,
+      amt: amount
+    }
+
+
+    const encoded = Buffer.from(JSON.stringify(doge20Tx)).toString('hex')
+
+
+    for (let r = 0; r < repeat; r++) {
+      console.log(`Airdrop ${i + 1}/${entries.length} (${r + 1}/${repeat}): ${op} ${amount} ${tick} to ${address}`)
+      await mint(address, 'text/plain;charset=utf-8', encoded)
+    }
+  }
 }
 
 

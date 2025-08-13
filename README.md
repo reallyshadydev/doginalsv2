@@ -152,6 +152,31 @@ Examples:
 node . drc-20 mint D5KBUgH7KiZQPaSUhvoQY5DVraWKn345su DCAC 100000000
 ```
 
+### DRC-20 Airdrop
+Provide a JSON file with recipients. Supports either an array or an object with `airDropList`.
+
+Minimal schema per entry:
+- `address` (or `dogecoin_address` or `to`): recipient Dogecoin address
+- `tick` (or `ticker`): token ticker
+- `amount` (or `amt`): amount to mint/transfer
+- `op` (optional): `mint` or `transfer` (default `transfer`)
+- `repeat` (optional): number of times to send the same entry
+
+Example file `airdrop-example.json`:
+```
+{
+  "airDropList": [
+    { "address": "DCHxodkzaKCLjmnG4LP8uH6NKynmntmCNz", "tick": "dcac", "amount": 1000, "op": "transfer" },
+    { "dogecoin_address": "DRh4mQh8iZ6ug2i8m7p9m4C2VwT3d9Q6oX", "ticker": "dcac", "amt": "2500", "op": "mint", "repeat": 2 }
+  ]
+}
+```
+
+Run airdrop:
+```
+node . drc-20 airdrop airdrop-example.json
+```
+
 ## Viewing
 
 Start the server:
