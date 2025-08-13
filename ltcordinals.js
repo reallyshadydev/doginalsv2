@@ -5,9 +5,9 @@ const fs = require('fs')
 const dotenv = require('dotenv')
 const express = require('express')
 
-// Reuse bitcore's Script/Opcode parser just for tapscript decoding
-const dogecore = require('bitcore-lib-doge')
-const { Script, Opcode } = dogecore
+// Use Litecoin bitcore-lib for Script/Opcode parsing
+const litecore = require('bitcore-lib-ltc')
+const { Script, Opcode } = litecore
 
 dotenv.config()
 

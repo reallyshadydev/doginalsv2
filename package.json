@@ -14,6 +14,7 @@
     "bitcore-lib-doge": "^8.25.46",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "mime-types": "^2.1.35"
+    "mime-types": "^2.1.35",
+    "bitcore-lib-ltc": "^8.25.20"
   }
 }
