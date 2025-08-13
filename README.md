@@ -249,3 +249,29 @@ TESTNET=false
 
 The miner fee is too low. You can increase it up by putting FEE_PER_KB=300000000 in your .env file or just wait it out. The default is 100000000 but spikes up when demand is high.
 
+## Litecoin Ordinals (witness, non-chunked)
+
+Litecoin inscriptions store the full payload inside Taproot witness data (non‑chunked). This repo includes a lightweight extractor/server:
+
+- Configure your Litecoin node RPC in `.env` (reuse existing keys):
+```
+NODE_RPC_URL=http://127.0.0.1:9332
+NODE_RPC_USER=<username>
+NODE_RPC_PASS=<password>
+SERVER_PORT=3001
+```
+
+- Start viewer server:
+```
+node ltcordinals.js server
+```
+
+- Fetch an inscription by txid:
+```
+curl -v http://localhost:3001/tx/<ltc-txid>
+```
+
+Notes:
+- Parser expects standard Ordinals envelope in tapscript witness: OP_FALSE OP_IF "ord" 01 <content-type> 00 <data> OP_ENDIF
+- No chunking or P2SH chaining is used for Litecoin; the entire inscription is contained in one witness.
+
