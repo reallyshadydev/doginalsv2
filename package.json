@@ -15,6 +15,8 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mime-types": "^2.1.35",
-    "bitcore-lib-ltc": "^8.25.20"
+    "bitcore-lib-ltc": "^8.25.20",
+    "bitcoinjs-lib": "^6.1.5",
+    "tiny-secp256k1": "^2.2.1"
   }
 }
